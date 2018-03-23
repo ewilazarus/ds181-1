@@ -1,0 +1,24 @@
+#!/bin/lua
+
+CUSTOM_PKG_PATH = './.rocks/share/lua/5.3/?.lua'
+CUSTOM_CPKG_PATH = './.rocks/lib/lua/5.3/?.so'
+
+-- Insert custom package path/cpath into the package loader radar
+package.path = CUSTOM_PKG_PATH .. ';' .. package.path
+package.cpath = CUSTOM_CPKG_PATH .. ';' .. package.cpath
+
+
+function parse_cli()
+    local parser = require("argparse")()
+        :name './ds181-1'
+        :description 'Socket programming warm-up'
+        :epilog 'For more info, see "http://www.inf.puc-rio.br/~noemi/sd-18/trab1.html"'
+
+    parser:command_target('command')
+    parser:command('benchmarks b', 'Run the benchmarks')
+    parser:command('tests t', 'Run the tests')
+
+    return parser:parse()
+end
+
+require(parse_cli().command)
