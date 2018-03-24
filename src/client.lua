@@ -1,18 +1,23 @@
 local socket = require('socket')
 
 IP = '127.0.0.1'
-PORT = '8000'
+PORT = '8003'
 MESSAGE = 'download\n'
 
 
 local function naive(n)
-    local s = assert(socket.tcp())
-    for i = 1, n do
+    local i = 1
+    while i <= n do
+        i = i + 1
+        local s = assert(socket.tcp())
         s:connect(IP, PORT)
         s:send(MESSAGE)
         while true do
             local data, err, partial = s:receive()
-            if err == 'closed' or err == 'timeout' then
+            if err ~= nil then
+                i = i - 1
+                break
+            elseif data ~= nil and data:len() == 1024 then
                 break
             end
         end
@@ -23,13 +28,19 @@ end
 local function keepalive(n)
     local s = assert(socket.tcp())
     s:connect(IP, PORT)
-    for i = 1, n do
+    s:setoption('keepalive', true)
+    local i = 1
+    while i <= n do
+        i = i + 1
         s:send(MESSAGE)
         while true do
             local data, err, partial = s:receive()
-            if err == 'closed' or err == 'timeout' then
-                s:connect(IP, PORT)
-                i--
+            if err ~= nil then
+                print(err)
+                -- i = i - 1
+                break
+            elseif data ~= nil and data:len() == 1024 then
+                break
             end
         end
     end
