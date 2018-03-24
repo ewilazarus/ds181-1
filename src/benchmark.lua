@@ -1,7 +1,7 @@
 local socket = require('socket')
 local client = require('client')
 
-BATCH_COUNT = 1
+BATCH_COUNT = 10
 
 
 local function timeit(fn, n)

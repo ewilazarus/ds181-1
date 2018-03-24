@@ -13,7 +13,7 @@ end
 
 -- Binds the socket used by the server
 function server:spawn()
-    self.socket = assert(socket.bind('*', 8003))
+    self.socket = assert(socket.bind('*', 8005))
     self.ip, server.port = server.socket:getsockname()
 end
 
@@ -43,19 +43,28 @@ function server:listenKeepAlive()
         print('Error accepting connections')
         os.exit(1)
     end
-    channel:setoption('keepalive', true)
 
+    local isClosed = false
     while true do
         local request, err = channel:receive()
         if err ~= nil then
-            print('Error receiving message')
-            os.exit(1)
+            if err == 'closed' then
+                channel:close()
+                isClosed = true
+                break
+            else
+                print('Error receiving message: ' .. err)
+                os.exit(1)
+            end
         end
 
         local response = self:process(request)
         local lastb, err, lasti = channel:send(response .. '\n')
     end
-    channel:close()
+
+    if isClosed then
+        self:listenKeepAlive()
+    end
 end
 
 function server:listenNaive()
