@@ -11,18 +11,7 @@ Must have the Lua interpreter installed and available in the `$PATH`
 ## Usage
 
 ```
-Usage: ./ds181-1 [-h] <command> ...
-
-Socket programming warm-up
-
-Options:
-   -h, --help            Show this help message and exit.
-
-Commands:
-   benchmarks, b         Run the benchmarks
-   tests, t              Run the tests
-
-For more info, see "http://www.inf.puc-rio.br/~noemi/sd-18/trab1.html"
+./run.sh
 ```
 
 ## Author
@@ -34,8 +23,3 @@ For more info, see "http://www.inf.puc-rio.br/~noemi/sd-18/trab1.html"
 
 * Fedora release 27 (Twenty Seven)
 * Lua v5.3.4
-
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
